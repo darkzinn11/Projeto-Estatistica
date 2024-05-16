@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <title>CLEAR VIEW</title>
+
+</head>
+<body>
+
+    <header>
+        <nav class="navigation">
+        
+        <h1 class="colorful-text">
+          <span>C</span>
+          <span>L</span>
+          <span>E</span>
+          <span>A</span>
+          <span>R</span>
+          <span> </span>
+          <span>V</span>
+          <span>I</span>
+          <span>E</span>
+          <span>W</span>
+        </h1>
+           
+
+           <ul class="nav-menu">
+               <li class="nav-iten"><a href="#home">Home</a></li>
+               <li class="nav-iten"><a href="#sobre">Sobre</a></li>
+               <li class="nav-iten"><a href="#dados">Dados</a></li>
+               <i class='bx bx-search'></i>
+           </ul>
+
+           
+
+
+           <div class="menu">
+               <span class="bar"></span>
+               <span class="bar"></span>
+               <span class="bar"></span>
+           </div>
+
+
+        </nav>
+    </header>
+    
+
+    <main>
+
+        <section id="home" class="home">
+            <div class="home-text">
+                 
+                 <h4 class="text-h4">Bem vindo ao CLEAR VIEW</h4>
+                 <h1 class="text-h1">Transformando planilhas em insights poderosos com visualizações interativas de dados.</h1>
+                 <p>Potencializando o crescimento da sua empresa com análises detalhadas de vendas, receitas, despesas e satisfação do cliente</p>
+                 <a href="#sobre" class="home-btn">Saiba mais</a>
+                 
+            </div>
+
+
+            <div class="home-img">
+                <img src="{{ url_for('static', filename='Startup_Genius_Finance_Easy.png') }}" alt="image">
+            </div>
+        </section>
+
+        <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+        <!--Sobre-->
+
+        <section id="sobre" class = "sobre">       
+            <div class = "container">
+                <div class="Historia-da-img">
+                    <img class ="boneca1"  src="{{ url_for('static', filename='Bloco de Texto com Gráfico de Colunas Alinhado à Direita.png') }}" alt="boneca">
+                </div>                
+            </div>
+        </section>             
+
+<!------ Back-end ------>
+
+    </section>
+    <section id="dados" class = "dados">
+        <div class = "container">
+            <div class="botao">
+                <div class="Texto_cima">
+                    <h3>
+                        Selecione seu arquivo
+                    </h3>
+                </div>
+                <form id="myForm" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file">
+                    <input type="radio" name="opcao" value="1"> Vendas e Receitas<br>
+                    <input type="radio" name="opcao" value="2"> Despesas<br>
+                    <input type="radio" name="opcao" value="3"> Satisfação do Cliente<br>
+                    <input type="submit" value="Enviar">
+                </form>
+                <div id="graph"></div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!--------------------------------------------------------------- Javascript ----------------------------------------------------->
+
+     <!------ Animação para colocar no file de "escolher um arquivo" ------>
+
+    <style>
+        .animate {
+            /* Adicione sua animação CSS aqui */
+            transition: all 0.5s;
+            transform: scale(1.05);
+        }
+    </style>
+    
+    <script>
+        document.querySelector('input[type="file"]').addEventListener('change', function() {
+            this.classList.add('animate');
+        });
+    </script> 
+    
+    
+    <!------ Back=end python ------>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+    $(function() {
+        $('#myForm').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                type: 'POST',
+                url: '/data',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    var graphs = JSON.parse(data);
+                    Plotly.newPlot('graph', graphs.data, graphs.layout);
+                }
+            });
+        });
+    });
+    </script>
+
+
+    </body>
+    </html>
